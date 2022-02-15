@@ -5,7 +5,7 @@
 #' @return an igraph communities object
 #' @export
 #'
-#' @examples ## place
+#' @examples ## place holder
 return.community <- function(network){
   set.seed(123)
   communities <- igraph::cluster_leading_eigen(graph = network,
