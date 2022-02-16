@@ -1,0 +1,37 @@
+---
+title: "CommunitiesR2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## CommunitiesR2 package
+Helper functions to create network and individual-level metrics relating to igraph's community detection.
+```{r setup}
+library(CommunitiesR2)
+```
+
+
+### Creating networks
+  These functions are designed to create network from dataframes of close contacts (id1, id2 and seconds (or the time of the contact))
+```{r}
+
+```
+
+## Community measures
+  These include ones related to individual in/out of community strength, and those that contribute to the modularity. 
+  
+  * Network fragmentation: log number of sub-groups
+  * Sub-group cohesion: proportion of contacts that occur within sub-groups
+  * Participation coefficient: proportion of contacts made with individuals from the same vs different sub-groups.
+  * Zi: a normalised measure of an individuals interactions within its subgroup
+  
