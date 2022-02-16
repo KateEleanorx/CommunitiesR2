@@ -1,6 +1,6 @@
 Package: CommunitiesR2
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Convenience functions for network and individual-level metrics related to community detection.
 Version: 0.1.0
 Author: person("Kate", "Lewis", email = "k.lewis.1@warwick.ac.uk", role = c("aut", "cre"))
 Maintainer: The package maintainer <k.lewis.1@warwick.ac.ukt>
