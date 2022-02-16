@@ -13,10 +13,10 @@ return.community <- function(network){
   return(communities)
 }
 
-## Factors that  contribute to modulalarity
+## Factors that  contribute to modularity
 #' Title Network measures related to the communities
 #'
-#' @param x.net an network object, in matrix format
+#' @param x.net a network object, in matrix format
 #' @param community.net an igraph communities object
 #'
 #' @return A dataframe of the measures that are related to the community formation.
@@ -82,6 +82,45 @@ return.community.measures <- function(x.net, community.net){
 
   return(df)
 
+}
+
+## Return Pi and Zi - what's the paper
+
+#' Return in/out of community strength and Pi/Zi ()
+#'
+#' @param x.net a network object, in matrix format
+#' @param memberships a vector of community memberships (e.g from igraph communties $memberhip)
+#'
+#' @return Pi -
+#' Zi - a normalised measure of an individuals interactions within its subgroup
+#' @export
+#'
+#' @examples
+calc_Zi_Pi <- function(x.net, memberships){
+  indivs <- colnames(x.net)
+  socgroups <- memberships
+  IGS <- rep(NA, length(indivs))
+  OGS <- rep(NA, length(indivs))
+  Zi <- rep(NA, length(indivs))
+
+  ## Calc in and out of community strength for all individuals
+  for(i in 1:length(indivs)){
+    IGS[i] <- sum(x.net[which(memberships%in%memberships[i]==TRUE),i], na.rm = TRUE)
+    OGS[i] <- sum(x.net[which(memberships%in%memberships[i]==FALSE),i],  na.rm = TRUE)
+  }
+
+
+  #calculate Pi from formula 2 in the main text
+  Pi<-1-(OGS/(IGS+OGS))^2
+
+  #calculate Zi using formula 1 from the main text
+  for(i in 1:length(indivs)){
+    Zi[i]<-(IGS[i]-mean(IGS[which(memberships%in%memberships[i]==TRUE)]))/sd(IGS[which(memberships%in%memberships[i]==TRUE)])
+  }
+
+  #create a dataframe of all individual-level metrics
+  output<-data.frame(Zi,Pi, IGS, OGS)
+  return(output)
 }
 
 
