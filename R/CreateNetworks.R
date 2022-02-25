@@ -8,21 +8,19 @@
 #' This function takes a contacts list, and returns an igraph network object for  a  weighted network
 #' @param contacts the contacts list should take the form of a  data frame titled
 #' id1, id2 and seconds, where the ids are  the individuals
-#'
+#' @param id1 first id column
+#' @param id2 second id column
+#' @param seconds length of contact (seconds)
 #' @return returns an igraph object
 #' @export
 #'
-#' @examples
-#' id1 <- c("S1", "S2", "S3", "S1)
-#' id2 <- c("S3", "S4", "S1", "S2")
-#' seconds <- c(20, 30, 60, 110)
-#' contacts <- data.frame(id1, id2, seconds)
-#' create_network_igraph(contacts)
-create_network_igraph <- function(contacts){
+#' @examples # add later
+create_network_igraph <- function(contacts, id1 = id1, id2 = id2,
+                                  seconds = seconds){
   per_route <- contacts %>%
-    group_by(id1, id2)  %>%
-    summarise(weight = sum(seconds)) %>%
-    ungroup()
+    dplyr::group_by(id1, id2)  %>%
+    dplyr::summarise(weight = sum(seconds)) %>%
+    dplyr::ungroup()
 
 
     ## Find id1 not in id2 and rev
@@ -35,10 +33,10 @@ create_network_igraph <- function(contacts){
     nodes <- data.frame(nodes)
     colnames(nodes) <- "Proximity.Sensor"
 
-    g1 <- graph_from_data_frame(d=per_route, vertices=nodes, directed=F)
+    g1 <- igraph::graph_from_data_frame(d=per_route, vertices=nodes, directed=F)
 
     ## Set edge weight as sum of seconds in contact
-    E(g1)$weight <- per_route$weight
+    igraph::E(g1)$weight <- per_route$weight
 
     ##  Return the graph
     return(g1)
@@ -50,22 +48,22 @@ create_network_igraph <- function(contacts){
 #' @param contacts a dataframe of contacts in  the form ake the form of a  dataframe titled
 #' id1, id2 and seconds, where the ids are  the individuals
 #' @param diag logical indicating if  the diagonal should  be included. If false, will be NA, indicating no self loops
+#' @param id1 first id column
+#' @param id2 second id column
+#' @param seconds length of contact (seconds)
 #'
 #' @return  an adjacnecy matrix
 #' @export
 #'
-#' @examples #' id1 <- c("S1", "S2", "S3", "S1)
-#' id2 <- c("S3", "S4", "S1", "S2")
-#' seconds <- c(20, 30, 60, 110)
-#' contacts <- data.frame(id1, id2, seconds)
-#' p1 <- create_network_adjacency(contacts)
-#' plot(p1)
+#' @examples #' # add later
 
-create_network_adjacency  <- function(contacts, diag = FALSE){
+create_network_adjacency  <- function(contacts, diag = FALSE,
+                                      id1 = id1, id2 = id2,
+                                      seconds = seconds){
   per_route <- contacts %>%
-    group_by(id1, id2)  %>%
-    summarise(weight = sum(seconds)) %>%
-    ungroup()
+    dplyr:: group_by(id1, id2)  %>%
+    dplyr::summarise(weight = sum(seconds)) %>%
+    dplyr::ungroup()
 
 
   ## Find id1 not in id2 and rev
@@ -78,13 +76,13 @@ create_network_adjacency  <- function(contacts, diag = FALSE){
   nodes <- data.frame(nodes)
   colnames(nodes) <- "Proximity.Sensor"
 
-  g1 <- graph_from_data_frame(d=per_route, vertices=nodes, directed=F)
+  g1 <- igraph::graph_from_data_frame(d=per_route, vertices=nodes, directed=F)
 
   ## Set edge weight as sum of seconds in contact
-  E(g1)$weight <- per_route$weight
+  igraph::E(g1)$weight <- per_route$weight
 
   ## Return the graph
-  net <- as_adjacency_matrix(g1, attr = "weight", names = TRUE)
+  net <- igraph::as_adjacency_matrix(g1, attr = "weight", names = TRUE)
   net <- as.matrix(net)
 
   if(diag == FALSE){
@@ -105,7 +103,7 @@ create_network_adjacency  <- function(contacts, diag = FALSE){
 #' @return new.mat - a new matrix consisting of the association indexes between individuals.
 #' @export
 #'
-#' @examples convert_AI(create_network_adjacency(contacts), sampling_period = 20, rownames= FALSE, diag = TRUE)
+#' @examples #'  #sort later
 convert_AI<- function(contacts_matrix = contacts_matrix,
                       sampling_period = sampling_period,
                       rownames = TRUE,

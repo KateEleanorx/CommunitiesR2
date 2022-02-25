@@ -16,5 +16,5 @@ an igraph communities object
 Title
 }
 \examples{
-## place
+## place holder
 }

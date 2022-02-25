@@ -115,7 +115,7 @@ calc_Zi_Pi <- function(x.net, memberships){
 
   #calculate Zi using formula 1 from the main text
   for(i in 1:length(indivs)){
-    Zi[i]<-(IGS[i]-mean(IGS[which(memberships%in%memberships[i]==TRUE)]))/sd(IGS[which(memberships%in%memberships[i]==TRUE)])
+    Zi[i]<-(IGS[i]-mean(IGS[which(memberships%in%memberships[i]==TRUE)]))/stats::sd(IGS[which(memberships%in%memberships[i]==TRUE)])
   }
 
   #create a dataframe of all individual-level metrics
@@ -123,5 +123,6 @@ calc_Zi_Pi <- function(x.net, memberships){
   return(output)
 }
 
+## Need to replace NaNs!!!
 
 

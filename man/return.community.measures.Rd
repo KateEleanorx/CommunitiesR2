@@ -7,7 +7,7 @@
 return.community.measures(x.net, community.net)
 }
 \arguments{
-\item{x.net}{an network object, in matrix format}
+\item{x.net}{a network object, in matrix format}
 
 \item{community.net}{an igraph communities object}
 }
