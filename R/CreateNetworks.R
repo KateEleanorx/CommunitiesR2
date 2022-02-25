@@ -11,12 +11,13 @@
 #' @param id1 first id column
 #' @param id2 second id column
 #' @param seconds length of contact (seconds)
+#' @param nodes optional vector of node ids (can be used to ensure 0 contacts are included, giving networks of equal size)
 #' @return returns an igraph object
 #' @export
 #'
 #' @examples # add later
 create_network_igraph <- function(contacts, id1 = id1, id2 = id2,
-                                  seconds = seconds){
+                                  seconds = seconds, nodes = NULL){
   per_route <- contacts %>%
     dplyr::group_by(id1, id2)  %>%
     dplyr::summarise(weight = sum(seconds)) %>%
@@ -27,11 +28,15 @@ create_network_igraph <- function(contacts, id1 = id1, id2 = id2,
      unique(per_route$id1)[which(unique(per_route$id1) %in% unique(per_route$id2) == FALSE)]
     missing <- unique(per_route$id2)[which(unique(per_route$id2) %in% unique(per_route$id1) == FALSE)]
 
+    if(is.null(nodes)){
+      nodes <- c(unique(per_route$id1), missing)
+      nodes <- data.frame(nodes)
+      colnames(nodes) <- "Proximity.Sensor"
+    } else{
+      nodes <- data.frame(nodes)
+      colnames(nodes) <- "Proximity.Sensor"
+    }
 
-    nodes <- c(unique(per_route$id1), missing)
-
-    nodes <- data.frame(nodes)
-    colnames(nodes) <- "Proximity.Sensor"
 
     g1 <- igraph::graph_from_data_frame(d=per_route, vertices=nodes, directed=F)
 
@@ -51,6 +56,7 @@ create_network_igraph <- function(contacts, id1 = id1, id2 = id2,
 #' @param id1 first id column
 #' @param id2 second id column
 #' @param seconds length of contact (seconds)
+#' @param nodes optional vector of node ids (can be used to ensure 0 contacts are included, giving netorks of equal size)
 #'
 #' @return  an adjacnecy matrix
 #' @export
@@ -59,7 +65,7 @@ create_network_igraph <- function(contacts, id1 = id1, id2 = id2,
 
 create_network_adjacency  <- function(contacts, diag = FALSE,
                                       id1 = id1, id2 = id2,
-                                      seconds = seconds){
+                                      seconds = seconds, nodes = NULL){
   per_route <- contacts %>%
     dplyr:: group_by(id1, id2)  %>%
     dplyr::summarise(weight = sum(seconds)) %>%
@@ -71,10 +77,15 @@ create_network_adjacency  <- function(contacts, diag = FALSE,
   missing <- unique(per_route$id2)[which(unique(per_route$id2) %in% unique(per_route$id1) == FALSE)]
 
 
-  nodes <- c(unique(per_route$id1), missing)
+  if(is.null(nodes)){
+    nodes <- c(unique(per_route$id1), missing)
+    nodes <- data.frame(nodes)
+    colnames(nodes) <- "Proximity.Sensor"
+  } else{
+    nodes <- data.frame(nodes)
+    colnames(nodes) <- "Proximity.Sensor"
+  }
 
-  nodes <- data.frame(nodes)
-  colnames(nodes) <- "Proximity.Sensor"
 
   g1 <- igraph::graph_from_data_frame(d=per_route, vertices=nodes, directed=F)
 
@@ -127,3 +138,24 @@ convert_AI<- function(contacts_matrix = contacts_matrix,
    return(new.mat)
 }
 }
+
+## Create a network that includes 0 contacts
+create_network_all_nodes <- function (contacts, diag = FALSE, id1 = id1, id2 = id2, seconds = seconds, nodes) {
+  per_route <- contacts %>% dplyr::group_by(id1, id2) %>% dplyr::summarise(weight = sum(seconds)) %>%
+    dplyr::ungroup()
+  nodes <- data.frame(nodes)
+  colnames(nodes) <- "Proximity.Sensor"
+  g1 <- igraph::graph_from_data_frame(d = per_route, vertices = nodes,
+                                      directed = F)
+  igraph::E(g1)$weight <- per_route$weight
+  net <- igraph::as_adjacency_matrix(g1, attr = "weight", names = TRUE)
+  net <- as.matrix(net)
+  if (diag == FALSE) {
+    diag(net) <- NA
+    return(net)
+  }
+  else {
+    return(net)
+  }
+}
+

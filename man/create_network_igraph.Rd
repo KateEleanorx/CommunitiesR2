@@ -5,7 +5,13 @@
 \title{Create network for igraph
 This function takes a contacts list, and returns an igraph network object for  a  weighted network}
 \usage{
-create_network_igraph(contacts, id1 = id1, id2 = id2, seconds = seconds)
+create_network_igraph(
+  contacts,
+  id1 = id1,
+  id2 = id2,
+  seconds = seconds,
+  nodes = NULL
+)
 }
 \arguments{
 \item{contacts}{the contacts list should take the form of a  data frame titled
@@ -16,6 +22,8 @@ id1, id2 and seconds, where the ids are  the individuals}
 \item{id2}{second id column}
 
 \item{seconds}{length of contact (seconds)}
+
+\item{nodes}{optional vector of node ids (can be used to ensure 0 contacts are included, giving netorks of equal size)}
 }
 \value{
 returns an igraph object

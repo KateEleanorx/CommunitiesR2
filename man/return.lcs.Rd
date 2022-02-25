@@ -2,7 +2,7 @@
 % Please edit documentation in R/ReturnNetworkMeasures.R
 \name{return.lcs}
 \alias{return.lcs}
-\title{Title Return local cosine similarities between network at time 1 and time 2}
+\title{Return local cosine similarities between network at time 1 and time 2}
 \usage{
 return.lcs(m1, m2)
 }
@@ -12,10 +12,10 @@ return.lcs(m1, m2)
 \item{m2}{network at time point 2}
 }
 \value{
-a vector of local csine similarities  for network 1 and 2
+Vector of local csine similarities  for network 1 and 2
 }
 \description{
-Title Return local cosine similarities between network at time 1 and time 2
+Return local cosine similarities between network at time 1 and time 2
 }
 \examples{
 ## fill in later
